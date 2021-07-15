@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <style>                
+        .editableNote
+        {
+            width: 80%;
+            margin: 40px auto;
+            padding: 5px 15px 5px 10px;
+            border: 2px solid #f66de6;
+            border-radius: 4px;
+            background-color: #fcf5f6;
+        }
+
+        .editableNote:hover, .editableNote:hover #note
+        {
+            background-color: #e8dee7;            
+        }
+
+        #note
+        {
+            background-color: #fcf5f6;
+            border: none;
+            width: 100%;
+            height: 400px;
+            resize: none;
+            margin-top: 20px;
+        }
+
+        #note:focus
+        {
+            outline: none;
+        }
+
+        .btn
+        {
+            display: inline;
+            margin: 20px;
+        }
+
+        .btns
+        {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+    <div class='editableNote'>
+        <div id="createdAt">Created At: </div>
+        <div id="updatedAt">Updated At: </div>
+        <textarea id="note" class="form-input"></textarea>
+    </div>
+    <div class="btns">
+        <button class="btn" onclick="saveNote()">Save</button>
+        <button class="btn" onclick="deleteNote()">Delete</button>
+    </div>
+    <script>
+        const id=new URLSearchParams(window.location.search).get('id');
+        
+        let notes=JSON.parse(localStorage.getItem('notes'));
+        requiredNote=notes.find(note=> note.id==id);
+        
+        const createdAt=document.querySelector('div#createdAt');
+        createdAt.innerHTML+=requiredNote.createdAt;
+
+        const updatedAt=document.querySelector('div#updatedAt');
+        updatedAt.innerHTML+=requiredNote.updatedAt;
+
+        const body=document.getElementById('note');
+        body.value=requiredNote.body;
+
+        function saveNote()
+        {
+            const changedNoteBody=document.getElementById('note').value;
+            const d=new Date().toDateString() + " " + new Date().toLocaleTimeString();
+            notes.map(note=>{
+                if(note.id==id)
+                {
+                    note.body=changedNoteBody;
+                    note.updatedAt=d;
+                }
+            });
+            localStorage.setItem('notes',JSON.stringify(notes));
+            window.location='index.html';
+        }
+
+        function deleteNote() {
+            notes=notes.filter(note=>note.id!=id);
+            localStorage.setItem('notes',JSON.stringify(notes));
+            window.location='index.html';
+        }
+    
+    </script>
+</body>
+</html>
