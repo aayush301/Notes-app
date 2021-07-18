@@ -13,7 +13,7 @@ function showNotes(notes)
         const note=document.createElement('div');
         note.classList.add('note');
         note.addEventListener('click', function(){
-            window.location=`/editNote.html?id=${notes[i].id}`;
+            window.location=`editNote.html?id=${notes[i].id}`;
         });
         notesElement.appendChild(note);
 
